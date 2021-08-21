@@ -48,57 +48,67 @@ augroup highlight_yank
 augroup END
 
 " Removes traling whitespaces.
-"augroup strip_whitespaces_on_save
-"  autocmd!
-"  autocmd BufWritePre * %s/\s\+$//e
-"augroup END
-
-
+augroup strip_whitespaces_on_save
+    autocmd!
+    autocmd BufWritePre * %s/\s\+$//e
+augroup END
 
 
 " Plugins
 " _________________________________________________________________
 call plug#begin(stdpath('config') . '/plugged')
-" Language Servers
+" Language Servers (Some requires to be imported first to avoid errors)
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}
 Plug 'sheerun/vim-polyglot'
 " Plug 'OmniSharp/omnisharp-vim'
 
+
 " Themes
-" nord
 "Plug 'arcticicestudio/nord-vim'
 " onedark
 Plug 'joshdick/onedark.vim'
-
-" Yes I am sneaky snek now
+Plug 'gruvbox-community/gruvbox'
 Plug 'ambv/black'
+Plug 'flazz/vim-colorschemes'
+Plug 'chriskempson/base16-vim'
 
-" Plevvim lsp Plugins
+" Status bars
+"Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
+"Plug 'hoob3rt/lualine.nvim'
+
+
+" LSP
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
-" Plug 'nvim-lua/completion-nvim'
 Plug 'glepnir/lspsaga.nvim'
 Plug 'simrat39/symbols-outline.nvim'
-" Plug 'tjdevries/nlua.nvim'
-" Plug 'tjdevries/lsp_extentions.nvim'
+Plug 'rust-lang/rust.vim'
+Plug 'darrikonn/vim-gofmt'
 
-" Neovim Tree shitter
+" Neovim Tree sitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': 'TSUpdate'}
 Plug 'nvim-treesitter/playground'
 
 " Debugger Plugins
 Plug 'puremourning/vimspector'
 Plug 'szw/vim-maximizer'
+Plug 'vim-utils/vim-man'
 
-Plug 'rust-lang/rust.vim'
-Plug 'darrikonn/vim-gofmt'
+" Git intergation
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
-Plug 'vim-utils/vim-man'
+Plug 'airblade/vim-gitgutter'
+
+" Undo history and makes it easier to browse and switch between different undo branches (almost like git)
 Plug 'mbbill/undotree'
+
+" Leverage the power of Vim's compiler plugins without being bound by synchronicity.  Kick off builds and test suites using one of several asynchronous adapters (including tmux, screen, iTerm, Windows, and a headless mode), and when the job completes, errors will be loaded and parsed automatically
 Plug 'tpope/vim-dispatch'
+
+" To learn basic VIM movements
 Plug 'theprimeagen/vim-be-good'
-Plug 'gruvbox-community/gruvbox'
+
+" Helps Navigating files (Needs configuration, have not started on it)
 Plug 'tpope/vim-projectionist'
 
 " telescope requirements...
@@ -107,41 +117,22 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 
-Plug 'flazz/vim-colorschemes'
-Plug 'chriskempson/base16-vim'
-
+" Multip-cursor support
 Plug 'terryma/vim-multiple-cursors'
-Plug 'airblade/vim-gitgutter'
-" HARPOON!!
-Plug 'mhinz/vim-rfc'
 
-" prettier
+" Prettier (Not yet setup)
 Plug 'sbdchd/neoformat'
 
-" should I try another status bar???
-Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
-Plug 'hoob3rt/lualine.nvim'
-
-Plug 'tpope/vim-fugitive'
+" Translates x spaces to tab symbols
 Plug 'Yggdroot/indentLine'
 
+" Definition previewer - Requires an LSP-server for the given file..
 Plug 'rmagatti/goto-preview'
 call plug#end()
 
 
 " PLUGIN CONFIGURATIONS
 " ______________________________________________________________________
-
-" Debuggers
-" ______________________________________________________________________
-" let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
-let g:python3_host_prog = '/usr/bin/python3'
-let g:vim_be_good_log_file = 1
-let g:vim_apm_log = 1
-
-if executable('rg')
-  let g:rg_derive_root='true'
-endif
 
 " Theme
 " ______________________________________________________________________________________
@@ -165,6 +156,17 @@ syntax on
 colorscheme onedark
 
 
+" Debuggers
+" ______________________________________________________________________
+" let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
+" Switch to your python3 path
+let g:python3_host_prog = '/usr/bin/python3'
+let g:vim_be_good_log_file = 1
+let g:vim_apm_log = 1
+
+if executable('rg')
+  let g:rg_derive_root='true'
+endif
 
 
 " Language servers and autocompletions and fomatters
@@ -175,12 +177,11 @@ set completeopt=menuone,noinsert,noselect
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 
 " LSP
-"
+" - Install command | server alias:
 " npm install -g pyright || gopls
 " npm install -g typescript-language-server || tsserver
 " npm i -g bash-language-server || bashls
 " GO111MODULE=on go get golang.org/x/tools/gopls@latest || gopls
-
 "let g:go_bin_path = $HOME."/go/bin"
 
 lua require('lspconfig').tsserver.setup{ on_attach=require'completion'.on_attach }
@@ -192,11 +193,11 @@ lua require('lspconfig').bashls.setup{ on_attach=require'completion'.on_attach }
 " Formatters (REQUIRES MORE WORK)
 "
 "let g:neoformat_run_all_formatters = 1
-
 augroup fmt
   autocmd!
   autocmd BufWritePre * undojoin | Neoformat
 augroup END
+
 
 
 " Tree viewers and file-search
@@ -208,7 +209,8 @@ nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 
-" Quality of life.
+
+" Handle 'hidden' characters
 " ______________________________________________________
 "
 " Display x spaces as tabs.
@@ -217,7 +219,8 @@ let g:indentLine_setColors = 1
 let g:indentLine_char_list = ['|']
 
 
-" Preview definitions, (uses LSP)
+" Preview definitions
+" -----------------------------------------------------
 lua require('goto-preview').setup { width = 120; height = 15; default_mappings = false; debug = false; opacity = nil; post_open_hook = nil; }
 
 nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>
