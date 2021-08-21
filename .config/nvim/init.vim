@@ -217,7 +217,7 @@ let g:indentLine_setColors = 1
 let g:indentLine_char_list = ['|']
 
 
-
+" Preview definitions, (uses LSP)
 lua require('goto-preview').setup { width = 120; height = 15; default_mappings = false; debug = false; opacity = nil; post_open_hook = nil; }
 
 nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>
