@@ -8,7 +8,7 @@
 " _________________________________________________________
 let mapleader = " "
 
-" Tab configs.
+" Reconfiguring tabs in visual and normal mode.
 nnoremap > >>_
 vnoremap < <gv
 
@@ -16,8 +16,11 @@ nnoremap < <<_
 vnoremap > >gv
 
 filetype plugin indent on
+" show existing tab with 4 spaces width
 set tabstop=4
+" when indenting with '>', use 4 spaces width
 set shiftwidth=4
+" On pressing tab, insert 4 spaces
 set expandtab
 
 " Remove .swp files
@@ -80,6 +83,10 @@ Plug 'chriskempson/base16-vim'
 " Status bars
 "Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
 "Plug 'hoob3rt/lualine.nvim'
+
+" Tab bars
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'romgrk/barbar.nvim'
 
 
 " LSP
@@ -226,6 +233,67 @@ nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 let g:indentLine_setColors = 1
 "let g:indentLine_color_gui = '#CCCCCC'
 let g:indentLine_char_list = ['|']
+
+
+
+" Tab-bar configurations
+nnoremap <silent>    <A-,> :BufferPrevious<CR>
+nnoremap <silent>    <A-.> :BufferNext<CR>
+" Re-order to previous/next
+nnoremap <silent>    <A-<> :BufferMovePrevious<CR>
+nnoremap <silent>    <A->> :BufferMoveNext<CR>
+" Goto buffer in position...
+nnoremap <silent>    <A-1> :BufferGoto 1<CR>
+nnoremap <silent>    <A-2> :BufferGoto 2<CR>
+nnoremap <silent>    <A-3> :BufferGoto 3<CR>
+nnoremap <silent>    <A-4> :BufferGoto 4<CR>
+nnoremap <silent>    <A-5> :BufferGoto 5<CR>
+nnoremap <silent>    <A-6> :BufferGoto 6<CR>
+nnoremap <silent>    <A-7> :BufferGoto 7<CR>
+nnoremap <silent>    <A-8> :BufferGoto 8<CR>
+nnoremap <silent>    <A-9> :BufferLast<CR>
+" Pin/unpin buffer
+nnoremap <silent>    <A-p> :BufferPin<CR>
+" Close buffer
+nnoremap <silent>    <A-c> :BufferClose<CR>
+" Wipeout buffer
+"                          :BufferWipeout<CR>
+" Close commands
+"                          :BufferCloseAllButCurrent<CR>
+"                          :BufferCloseAllButPinned<CR>
+"                          :BufferCloseBuffersLeft<CR>
+"                          :BufferCloseBuffersRight<CR>
+" Magic buffer-picking mode
+nnoremap <silent> <C-s>    :BufferPick<CR>
+nnoremap <silent> <leader>bb :BufferOrderByBufferNumber<CR>
+nnoremap <silent> <leader>bd :BufferOrderByDirectory<CR>
+nnoremap <silent> <leader>bl :BufferOrderByLanguage<CR>
+nnoremap <silent> <leader>bw :BufferOrderByWindowNumber<CR>
+
+let bufferline = get(g:, 'bufferline', {})
+let bufferline.add_in_buffer_number_order = v:false
+let bufferline.animation = v:true
+let bufferline.auto_hide = v:false
+let bufferline.tabpages = v:true
+let bufferline.closable = v:true
+let bufferline.clickable = v:true
+let bufferline.exclude_ft = ['javascript']
+let bufferline.exclude_name = ['package.json']
+let bufferline.icons = v:true
+let bufferline.icon_custom_colors = v:true
+let bufferline.icon_separator_active = '▎'
+let bufferline.icon_separator_inactive = '▎'
+let bufferline.icon_close_tab = ''
+let bufferline.icon_close_tab_modified = '●'
+let bufferline.icon_pinned = '車'
+let bufferline.insert_at_end = v:false
+let bufferline.maximum_padding = 4
+let bufferline.maximum_length = 30
+let bufferline.semantic_letters = v:true
+let bufferline.letters =
+  \ 'asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP'
+let bufferline.no_name_title = v:null
+
 
 
 " Preview definitions
