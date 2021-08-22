@@ -1,18 +1,24 @@
-" Neovim configurations.
-" @Author Marin Borg 2021/08/20.
+" -----------------------------------------------------
+" Neovim configurations.                               |
+" @Author Marin Borg 2021/08/20.                       |
+" _____________________________________________________
+
 
 " Keybinds
+" _________________________________________________________
 let mapleader = " "
 
+" Tab configs.
+nnoremap > >>_
+vnoremap < <gv
 
-" Shift tab to redo tab on line, tab to tab in line.
-nnoremap <Tab> >>_
-nnoremap <S-Tab> <<_
-inoremap <S-Tab> <C-D>
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
+nnoremap < <<_
+vnoremap > >gv
 
-
+filetype plugin indent on
+set tabstop=4
+set shiftwidth=4
+set expandtab
 
 " Remove .swp files
 set noswapfile
@@ -24,7 +30,6 @@ set wildignore+=*._build/
 set wildignore+=*/coverage/
 set wildignore+=*/node_modules/
 set wildignore+=*/.git/
-
 " turn hybrid line numbers on
 set number relativenumber
 set nuw=6
@@ -181,13 +186,17 @@ let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 " npm install -g pyright || gopls
 " npm install -g typescript-language-server || tsserver
 " npm i -g bash-language-server || bashls
+" npm install -g dockerfile-language-server-nodejs || dockerls
+" i
 " GO111MODULE=on go get golang.org/x/tools/gopls@latest || gopls
+
 "let g:go_bin_path = $HOME."/go/bin"
 
 lua require('lspconfig').tsserver.setup{ on_attach=require'completion'.on_attach }
 lua require('lspconfig').pyright.setup{ on_attach=require'completion'.on_attach }
 lua require('lspconfig').gopls.setup{ on_attach=require'completion'.on_attach }
 lua require('lspconfig').bashls.setup{ on_attach=require'completion'.on_attach }
+lua require('lspconfig').dockerls.setup{}
 
 
 " Formatters (REQUIRES MORE WORK)
