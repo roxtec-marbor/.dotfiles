@@ -26,6 +26,9 @@ set nuw=6
 set cursorline
 set showmatch
 
+"set list
+"set listchars=trail:~
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -46,6 +49,7 @@ Plugin 'git://git.wincent.com/command-t.git'
 " Pass the path to set the runtimepath properly.
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'sonph/onehalf', { 'rtp': 'vim' }
+Plugin 'morhetz/gruvbox'
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
 " Plugin 'ascenator/L9', {'name': 'newL9'}
@@ -56,6 +60,7 @@ Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'kien/ctrlp.vim'
 Plugin 'fatih/vim-go'
 Plugin 'python-mode/python-mode'
+Plugin 'iamcco/markdown-preview.nvim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -79,9 +84,16 @@ set laststatus=2
 syntax on
 set t_Co=256
 set cursorline
-colorscheme onehalfdark
-let g:airline_theme='onehalfdark'
-let g:lightline = { 'colorscheme': 'onehalfdark' }
+colorscheme gruvbox
+set termguicolors
+set background=dark
+
+set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 8
+"set guifont=Fira\ Code\ 8
+
+"colorscheme onehalfdark
+"let g:airline_theme='onehalfdark'
+"let g:lightline = { 'colorscheme': 'onehalfdark' }
 
 let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
@@ -91,6 +103,12 @@ let g:pymode_syntax = 1
 let g:pymode_syntax_all = 1
 let g:pymode_options = 1
 let g:pymode_options_max_line_length = 100
+
+let g:mkdp_auto_start = 1
+let g:mkdp_auto_close = 1
+
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+
 " Custom commands
 augroup CursorLine
   au!
@@ -121,3 +139,6 @@ endif
 " Auto formats XML and JSON files
 com! FormatXML %!python3 -c "import xml.dom.minidom as xmld, sys; dom = xmld.parse(sys.stdin); lines = dom.toprettyxml(); print('\n'.join([s for s in lines.splitlines() if s.strip()]))"
 com! FormatJSON %!python3 -c "import json, sys, collections; print(json.dumps(json.load(sys.stdin, object_pairs_hook=collections.OrderedDict), indent=4))"
+
+"autocmd FileType json autocmd BufWritePre <buffer> :FormatJSON
+"autocmd FileType xml autocmd BufWritePre <buffer> :FormatXML
